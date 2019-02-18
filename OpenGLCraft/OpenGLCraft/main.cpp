@@ -369,22 +369,8 @@ void keyboard(unsigned char key, int x, int y)
 void print_menu()
 {
     printf("\nObject controls:\n");
-    printf("  '*' = restart explosion\n");
-    printf("  '-' = decrease speed\n");
-    printf("  '+' = increase speed\n");
-    printf("  'b' = decrease bounce\n");
-    printf("  'B' = increase bounce\n");
-    printf("  'g' = turn gravity off\n");
-    printf("  'G' = turn gravity on\n");
-    printf("\nLighting controls:\n");
-    printf("  'a' = decrease ambient light\n");
-    printf("  'A' = increase ambient light\n");
-    printf("  'd' = decrease diffuse light\n");
-    printf("  'D' = increase diffuse light\n");
-    printf("  's' = decrease specular light\n");
-    printf("  'S' = increase specular light\n");
-    printf("  'p' = decrease specular light exponent\n");
-    printf("  'P' = increase specular light exponent\n");
+    printf("  '-' = remove block\n");
+    printf("  '+' = add block\n");
     printf("\nMotion controls:\n");
     printf("  'r' = switch to rotation mode\n");
     printf("  't' = switch to translation mode\n");
