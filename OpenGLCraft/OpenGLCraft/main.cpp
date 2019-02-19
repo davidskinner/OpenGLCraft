@@ -121,7 +121,7 @@ void init()
 //---------------------------------------
 // Draw 3D cube
 //---------------------------------------
-void draw_cube(float midx, float midy, float midz, float size)
+void draw_cube(float midx, float midy, float midz, float size, bool player_block = false)
 {
     // Define 8 vertices
     float ax = midx - size / 2;
@@ -149,43 +149,77 @@ void draw_cube(float midx, float midy, float midz, float size)
     float hy = midy + size / 2;
     float hz = midz - size / 2;
     
+    int beginMode;
+    if(player_block)
+    {
+        glColor3f(1, 0, 0);
+        beginMode = GL_LINE_LOOP;
+    }
+    else{
+        beginMode = GL_POLYGON;
+    }
+    
+    if(beginMode == GL_POLYGON)
+    {
+        glColor3f(getColor(), getColor(), getColor());
+    }
     // Draw 6 faces
-    glBegin(GL_LINE_LOOP);
+    glBegin(beginMode);
     glVertex3f(ax, ay, az);
     glVertex3f(bx, by, bz);
     glVertex3f(cx, cy, cz);
     glVertex3f(dx, dy, dz);
     glEnd();
     
-    glBegin(GL_LINE_LOOP);
+    if(beginMode == GL_POLYGON)
+    {
+        glColor3f(getColor(), getColor(), getColor());
+    }
+    glBegin(beginMode);
     glVertex3f(ax, ay, az);
     glVertex3f(dx, dy, dz);
     glVertex3f(hx, hy, hz);
     glVertex3f(ex, ey, ez);
     glEnd();
     
-    glBegin(GL_LINE_LOOP);
+    if(beginMode == GL_POLYGON)
+    {
+        glColor3f(getColor(), getColor(), getColor());
+    }
+    glBegin(beginMode);
     glVertex3f(ax, ay, az);
     glVertex3f(ex, ey, ez);
     glVertex3f(fx, fy, fz);
     glVertex3f(bx, by, bz);
     glEnd();
     
-    glBegin(GL_LINE_LOOP);
+    if(beginMode == GL_POLYGON)
+    {
+        glColor3f(getColor(), getColor(), getColor());
+    }
+    glBegin(beginMode);
     glVertex3f(gx, gy, gz);
     glVertex3f(fx, fy, fz);
     glVertex3f(ex, ey, ez);
     glVertex3f(hx, hy, hz);
     glEnd();
     
-    glBegin(GL_LINE_LOOP);
+    if(beginMode == GL_POLYGON)
+    {
+        glColor3f(getColor(), getColor(), getColor());
+    }
+    glBegin(beginMode);
     glVertex3f(gx, gy, gz);
     glVertex3f(cx, cy, cz);
     glVertex3f(bx, by, bz);
     glVertex3f(fx, fy, fz);
     glEnd();
     
-    glBegin(GL_LINE_LOOP);
+    if(beginMode == GL_POLYGON)
+    {
+        glColor3f(getColor(), getColor(), getColor());
+    }
+    glBegin(beginMode);
     glVertex3f(gx, gy, gz);
     glVertex3f(hx, hy, hz);
     glVertex3f(dx, dy, dz);
@@ -255,8 +289,8 @@ void display()
     glRotatef(zangle, 0.0, 0.0, 1.0);
 
     // Draw bounding box
-    draw_cube(0,0,0,RADIUS);
-    draw_cube(PlayerX, PlayerY, PlayerZ, 10);
+    draw_cube(0,0,0,RADIUS,true);
+    draw_cube(PlayerX, PlayerY, PlayerZ, 10,true);
     drawCubes();
     glutSwapBuffers();
 }
