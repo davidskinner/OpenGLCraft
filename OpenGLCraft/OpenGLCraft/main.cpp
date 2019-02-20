@@ -1,15 +1,12 @@
 //---------------------------------------
-// Program: balls2.cpp
-// Purpose: Use Phong shading to display exploding
-//          balls within a cubic region
-// Author:  John Gauch
-// Date:    December 2008
+// Program: OpenGLCraft.cpp
+// Author:  David Skinner
+// Date:    February 2019
+// Much of this code surrounding the drawing of cubes was contributed by John Gauch
+// The logic for how to make it all work was contributed by David Skinner
 //---------------------------------------
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
-using namespace std;
+
+#include "H.h"
 
 // Constants
 #define ROTATE 1
@@ -20,7 +17,6 @@ using namespace std;
 #define SIZE 20
 #define STEP 0.1
 #define SLOW 0.995
-
 
 // Max values
 const int xmax = 50;
@@ -42,10 +38,6 @@ int mode = ROTATE;
 // Player block
 int PlayerX, PlayerY, PlayerZ = 0;
 
-// Ball variables
-float Px[COUNT];
-float Py[COUNT];
-float Pz[COUNT];
 float Radius[COUNT];
 float Red[COUNT];
 float Green[COUNT];
@@ -61,14 +53,12 @@ float Z[SIZE+1][SIZE+1];
      int x;
      int y;
      int z;
-     bool kill = false;
     
     Cube(int xd, int yd, int zd)
     {
         x = xd;
         y = yd;
         z = zd;
-        kill = false;
     }
 };
 
@@ -82,25 +72,6 @@ float myrand(float min, float max)
 }
 
 //---------------------------------------
-// Initialize balls
-//---------------------------------------
-void init_balls()
-{
-    // Initialize balls with random positions and colors
-    int i;
-    for (i=0; i<COUNT; i++)
-    {
-        
-    }
-    
-    // Initialize ball surface
-    for (i = 0; i <= SIZE; i++)
-    {
-        
-    }
-}
-
-//---------------------------------------
 // Init function for OpenGL
 //---------------------------------------
 void init()
@@ -111,11 +82,6 @@ void init()
     glLoadIdentity();
     glOrtho(-RADIUS, RADIUS, -RADIUS, RADIUS, -RADIUS, RADIUS);
     glEnable(GL_DEPTH_TEST);
-    
-    // Initialize smooth shading
-    
-    // Initialize bouncing balls
-    init_balls();
 }
 
 //---------------------------------------
@@ -226,36 +192,6 @@ void draw_cube(float midx, float midy, float midz, float size, bool player_block
     glVertex3f(cx, cy, cz);
     glEnd();
 }
-//---------------------------------------
-// Draw 3D ball
-//---------------------------------------
-void draw_ball(float centerX, float centerY,
-               float centerZ, float radius)
-{
-    // Draw the surface
-    int i, j;
-    for (i = 0; i < SIZE; i++)
-        for (j = 0; j < SIZE; j++)
-        {
-            glBegin(GL_POLYGON);
-            glNormal3f(X[i][j], Y[i][j], Z[i][j]);
-            glVertex3f(centerX+radius*X[i][j],
-                       centerY+radius*Y[i][j], centerZ+radius*Z[i][j]);
-            
-            glNormal3f(X[i][j + 1], Y[i][j + 1], Z[i][j + 1]);
-            glVertex3f(centerX+radius*X[i][j + 1],
-                       centerY+radius*Y[i][j + 1], centerZ+radius*Z[i][j + 1]);
-            
-            glNormal3f(X[i + 1][j + 1], Y[i + 1][j + 1], Z[i + 1][j + 1]);
-            glVertex3f(centerX+radius*X[i + 1][j + 1],
-                       centerY+radius*Y[i + 1][j + 1], centerZ+radius*Z[i + 1][j + 1]);
-            
-            glNormal3f(X[i + 1][j], Y[i + 1][j], Z[i + 1][j]);
-            glVertex3f(centerX+radius*X[i + 1][j],
-                       centerY+radius*Y[i + 1][j], centerZ+radius*Z[i + 1][j]);
-            glEnd();
-        }
-}
 
 void drawCubes()
 {
@@ -304,8 +240,6 @@ void keyboard(unsigned char key, int x, int y)
     // Determine if we are in ROTATE or TRANSLATE mode
     if ((key == 'r') || (key == 'R'))
         mode = ROTATE;
-    else if ((key == 't') || (key == 'T'))
-        mode = TRANSLATE;
     else if ((key == 'f') || (key == 'F'))
         mode = FLYMODE;
     
@@ -376,23 +310,6 @@ void keyboard(unsigned char key, int x, int y)
             zangle += 5;
     }
     
-    // Update TRANSLATE parameters
-    if (mode == TRANSLATE)
-    {
-        if (key == 'x')
-            xpos -= 5;
-        else if (key == 'y')
-            ypos -= 5;
-        else if (key == 'z')
-            zpos -= 5;
-        else if (key == 'X')
-            xpos += 5;
-        else if (key == 'Y')
-            ypos += 5;
-        else if (key == 'Z')
-            zpos += 5;
-    }
-    
     // Redraw objects
     glutPostRedisplay();
 }
@@ -403,17 +320,16 @@ void keyboard(unsigned char key, int x, int y)
 void print_menu()
 {
     printf("\nObject controls:\n");
-    printf("  '-' = remove block\n");
     printf("  '+' = add block\n");
+    printf("  '-' = remove block\n");
     printf("\nMotion controls:\n");
     printf("  'r' = switch to rotation mode\n");
-    printf("  't' = switch to translation mode\n");
-    printf("  'x' = decrease X translation/rotation\n");
-    printf("  'X' = increase X translation/rotation\n");
-    printf("  'y' = decrease Y translation/rotation\n");
-    printf("  'Y' = increase Y translation/rotation\n");
-    printf("  'z' = decrease Z translation/rotation\n");
-    printf("  'Z' = increase Z translation/rotation\n");
+    printf("  'x' = decrease X rotation\n");
+    printf("  'X' = increase X rotation\n");
+    printf("  'y' = decrease Y rotation\n");
+    printf("  'Y' = increase Y rotation\n");
+    printf("  'z' = decrease Z rotation\n");
+    printf("  'Z' = increase Z rotation\n");
 }
 
 //---------------------------------------
@@ -457,13 +373,12 @@ int main(int argc, char *argv[])
     glutInitWindowSize(700, 700);
     glutInitWindowPosition(250, 250);
     glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-    glutCreateWindow("Baaaaaaalllllllllllls");
+    glutCreateWindow("Basically Minecraft");
     init();
     print_menu();
     
     // Specify callback function
     glutDisplayFunc(display);
-//    glutIdleFunc(idle);
     glutKeyboardFunc(keyboard);
     glutMouseFunc(mouse);
     glutMainLoop();
