@@ -195,14 +195,14 @@ void draw_cube(float midx, float midy, float midz, float size, bool player_block
 
 void drawCubes()
 {
-    for (int i = 0; i < cubePositions.size(); i++) {
+    for (int i = 0; i < (size_t)cubePositions.size(); i++) {
         draw_cube(cubePositions[i].x, cubePositions[i].y, cubePositions[i].z, 10);
     }
 }
 
 void removeCube(int x, int y, int z)
 {
-    for (int i = 0; i < cubePositions.size(); i++) {
+    for (int i = 0; i < (size_t)cubePositions.size(); i++) {
         if(cubePositions[i].x == x && cubePositions[i].y == y && cubePositions[i].z == z)
         {
             cubePositions.erase(cubePositions.begin()+i);
